@@ -59,7 +59,7 @@ router.put('/:id', async (req, res) => {
     if (order !== undefined) update.order = order
     if (active !== undefined) update.active = active
     if (description !== undefined) update.description = description
-    const link = await Link.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true })
+    const link = await Link.findByIdAndUpdate(req.params.id, { $set: update }, { new: true, runValidators: true })
     if (!link) return res.status(404).json({ error: 'Link not found' })
     res.json(link)
   } catch (err) {
