@@ -1,12 +1,27 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const rateLimit = require('express-rate-limit')
+const mongoSanitize = require('express-mongo-sanitize')
 const mongoose = require('mongoose')
 
 const app = express()
 
-app.use(cors({ origin: '*' }))
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:80']
+
+app.use(cors({ origin: allowedOrigins, optionsSuccessStatus: 200 }))
 app.use(express.json())
+app.use(mongoSanitize())
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+app.use('/api/', apiLimiter)
 
 app.use('/api/profile', require('./routes/profile'))
 app.use('/api/links', require('./routes/links'))

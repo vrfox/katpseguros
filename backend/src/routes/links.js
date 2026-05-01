@@ -49,7 +49,16 @@ router.put('/reorder', async (req, res) => {
 // PUT /api/links/:id - update link
 router.put('/:id', async (req, res) => {
   try {
-    const link = await Link.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const { title, url, type, icon, order, active, description } = req.body
+    const update = {}
+    if (title !== undefined) update.title = title
+    if (url !== undefined) update.url = url
+    if (type !== undefined) update.type = type
+    if (icon !== undefined) update.icon = icon
+    if (order !== undefined) update.order = order
+    if (active !== undefined) update.active = active
+    if (description !== undefined) update.description = description
+    const link = await Link.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true })
     if (!link) return res.status(404).json({ error: 'Link not found' })
     res.json(link)
   } catch (err) {
