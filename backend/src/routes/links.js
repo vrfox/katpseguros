@@ -25,7 +25,8 @@ router.get('/all', async (req, res) => {
 // POST /api/links - create new link
 router.post('/', async (req, res) => {
   try {
-    const link = new Link(req.body)
+    const { title, url, type, icon, order, active, description } = req.body
+    const link = new Link({ title, url, type, icon, order, active, description })
     await link.save()
     res.status(201).json(link)
   } catch (err) {
