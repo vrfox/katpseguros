@@ -11,14 +11,13 @@ A fashionable, insurance-branded linktree clone built with **Node.js**, **React*
 - 🎬 **Video embeds** — YouTube and Vimeo inline players (supports `watch?v=`, `youtu.be/`, and `/embed/` URL formats)
 - ⚙️ **Admin panel** — full CRUD management (add/edit/delete/reorder/toggle links and edit brand profile)
 - 🎨 **Fashion insurance theme** — deep navy + gold glassmorphism design with smooth animations
-- 🚀 **Docker ready** — one-command startup with `docker compose up`
-- ♻️ **PM2 managed backend** — production backend runs under PM2 for automatic restarts inside the backend container
+- ♻️ **PM2 managed backend and frontend** — both apps can run under PM2 without Docker
 
 ## 🛠️ Tech Stack
 
 | Layer | Tech |
 |---|---|
-| Frontend | React 18 + Vite + Tailwind CSS |
+| Frontend | React 18 + Vite + Tailwind CSS + PM2 |
 | Backend | Node.js + Express.js + PM2 |
 | Database | MongoDB + Mongoose |
 | Icons | react-icons |
@@ -26,16 +25,6 @@ A fashionable, insurance-branded linktree clone built with **Node.js**, **React*
 | Security | express-rate-limit + express-mongo-sanitize |
 
 ## 🚀 Quick Start
-
-### With Docker (recommended)
-
-```bash
-docker compose up
-```
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:5000/api
-- Admin panel: http://localhost:5173/admin
 
 ### Without Docker (requires MongoDB)
 
@@ -60,7 +49,15 @@ npm install
 npm run start:pm2
 ```
 
-This uses `ecosystem.config.js` and starts the API with `pm2-runtime` in production mode.
+### Run frontend with PM2
+
+```bash
+cd frontend
+npm install
+npm run start:pm2
+```
+
+Frontend runs with Vite on port `5173` and proxies `/api` requests to `http://localhost:5000`.
 
 ## 📁 Project Structure
 
@@ -68,17 +65,18 @@ This uses `ecosystem.config.js` and starts the API with `pm2-runtime` in product
 katpseguros/
 ├── backend/
 │   ├── src/
-│   │   ├── models/        # Mongoose schemas (Profile, Link)
-│   │   ├── routes/        # REST API routes (/api/profile, /api/links)
-│   │   └── server.js      # Express app + MongoDB connection + seed data
+│   │   ├── models/         # Mongoose schemas (Profile, Link)
+│   │   ├── routes/         # REST API routes (/api/profile, /api/links)
+│   │   └── server.js       # Express app + MongoDB connection + seed data
 │   ├── ecosystem.config.js # PM2 runtime config
 │   └── package.json
 ├── frontend/
 │   ├── src/
-│   │   ├── components/    # ProfileHeader, LinkCard, VideoEmbed, SocialLinks, AdminPanel
-│   │   ├── pages/         # LinktreePage (public), AdminPage (admin)
-│   │   ├── App.jsx        # React Router setup
-│   │   └── index.css      # Tailwind + custom styles
+│   │   ├── components/     # ProfileHeader, LinkCard, VideoEmbed, SocialLinks, AdminPanel
+│   │   ├── pages/          # LinktreePage (public), AdminPage (admin)
+│   │   ├── App.jsx         # React Router setup
+│   │   └── index.css       # Tailwind + custom styles
+│   ├── ecosystem.config.js # PM2 runtime config
 │   └── package.json
 └── docker-compose.yml
 ```
