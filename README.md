@@ -12,13 +12,14 @@ A fashionable, insurance-branded linktree clone built with **Node.js**, **React*
 - ⚙️ **Admin panel** — full CRUD management (add/edit/delete/reorder/toggle links and edit brand profile)
 - 🎨 **Fashion insurance theme** — deep navy + gold glassmorphism design with smooth animations
 - 🚀 **Docker ready** — one-command startup with `docker compose up`
+- ♻️ **PM2 managed backend** — production backend runs under PM2 for automatic restarts inside the backend container
 
 ## 🛠️ Tech Stack
 
 | Layer | Tech |
 |---|---|
 | Frontend | React 18 + Vite + Tailwind CSS |
-| Backend | Node.js + Express.js |
+| Backend | Node.js + Express.js + PM2 |
 | Database | MongoDB + Mongoose |
 | Icons | react-icons |
 | HTTP Client | Axios |
@@ -51,6 +52,16 @@ npm install
 npm run dev                 # starts on port 5173
 ```
 
+### Run backend with PM2
+
+```bash
+cd backend
+npm install
+npm run start:pm2
+```
+
+This uses `ecosystem.config.js` and starts the API with `pm2-runtime` in production mode.
+
 ## 📁 Project Structure
 
 ```
@@ -60,6 +71,7 @@ katpseguros/
 │   │   ├── models/        # Mongoose schemas (Profile, Link)
 │   │   ├── routes/        # REST API routes (/api/profile, /api/links)
 │   │   └── server.js      # Express app + MongoDB connection + seed data
+│   ├── ecosystem.config.js # PM2 runtime config
 │   └── package.json
 ├── frontend/
 │   ├── src/
