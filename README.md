@@ -11,14 +11,15 @@ A fashionable, insurance-branded linktree clone built with **Node.js**, **React*
 - 🎬 **Video embeds** — YouTube and Vimeo inline players (supports `watch?v=`, `youtu.be/`, and `/embed/` URL formats)
 - ⚙️ **Admin panel** — full CRUD management (add/edit/delete/reorder/toggle links and edit brand profile)
 - 🎨 **Fashion insurance theme** — deep navy + gold glassmorphism design with smooth animations
-- ♻️ **PM2 managed backend and frontend** — both apps can run under PM2 without Docker
+- ♻️ **PM2 managed backend and frontend** — both apps run from the repository root with one PM2 ecosystem file
 
 ## 🛠️ Tech Stack
 
 | Layer | Tech |
 |---|---|
-| Frontend | React 18 + Vite + Tailwind CSS + PM2 |
-| Backend | Node.js + Express.js + PM2 |
+| Frontend | React 18 + Vite + Tailwind CSS |
+| Backend | Node.js + Express.js |
+| Process Manager | PM2 |
 | Database | MongoDB + Mongoose |
 | Icons | react-icons |
 | HTTP Client | Axios |
@@ -36,25 +37,29 @@ npm install
 npm run dev                 # starts on port 5000
 
 # Frontend (separate terminal)
-cd frontend
+cd ../frontend
 npm install
 npm run dev                 # starts on port 5173
 ```
 
-### Run backend with PM2
+### Run both apps with PM2 from the project root
 
 ```bash
-cd backend
-npm install
-npm run start:pm2
+npm install -g pm2
+cd katpseguros
+npm --prefix backend install
+npm --prefix frontend install
+pm2 start ecosystem.config.js
 ```
 
-### Run frontend with PM2
+### PM2 management
 
 ```bash
-cd frontend
-npm install
-npm run start:pm2
+pm2 status
+pm2 logs
+pm2 restart ecosystem.config.js
+pm2 save
+pm2 startup
 ```
 
 Frontend runs with Vite on port `5173` and proxies `/api` requests to `http://localhost:5000`.
@@ -63,12 +68,12 @@ Frontend runs with Vite on port `5173` and proxies `/api` requests to `http://lo
 
 ```
 katpseguros/
+├── ecosystem.config.js      # PM2 config for backend + frontend
 ├── backend/
 │   ├── src/
 │   │   ├── models/         # Mongoose schemas (Profile, Link)
 │   │   ├── routes/         # REST API routes (/api/profile, /api/links)
 │   │   └── server.js       # Express app + MongoDB connection + seed data
-│   ├── ecosystem.config.js # PM2 runtime config
 │   └── package.json
 ├── frontend/
 │   ├── src/
@@ -76,7 +81,6 @@ katpseguros/
 │   │   ├── pages/          # LinktreePage (public), AdminPage (admin)
 │   │   ├── App.jsx         # React Router setup
 │   │   └── index.css       # Tailwind + custom styles
-│   ├── ecosystem.config.js # PM2 runtime config
 │   └── package.json
 └── docker-compose.yml
 ```
