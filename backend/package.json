@@ -4,7 +4,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "start:pm2": "pm2-runtime start ecosystem.config.js --env production"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -12,7 +13,8 @@
     "express": "^4.19.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.4.1",
-    "mongoose": "^8.4.0"
+    "mongoose": "^8.4.0",
+    "pm2": "^5.4.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
